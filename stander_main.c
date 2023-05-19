@@ -17,5 +17,5 @@ int main(int argc, char *argv[], char **envr)
 		ready(argv, envr);
 	else
 		return (1);
-	return (0);
+	exit(0);
 }
