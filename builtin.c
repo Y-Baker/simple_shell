@@ -1,6 +1,29 @@
 #include "stander_header.h"
 
 /**
+ * checks - checks for builtin functions
+ * @arguments: the arguments
+ * Return: 0 if not builtin
+*/
+
+int checks(char **arguments)
+{
+	int re_1, re_2;
+
+	re_1 = check_builtin(arguments);
+	if (re_1 == 0)
+	{
+		re_2 = execute_builtin_command(arguments);
+		if (re_2 == 0)
+			return (0);
+		else
+			return (re_2);
+
+	}
+	return (re_1);
+}
+
+/**
  * check_builtin - check for built in function
  * @arguments: the arguments of command line
  * Return: 0 if it not an builtin function
@@ -28,9 +51,8 @@ int check_builtin(char **arguments)
 	switch (n)
 	{
 	case 1:
-		/* exit */
-		write(STDOUT_FILENO, "this is exit function\n", 23);
-		return (1);
+		free(arguments);
+		exit(EXIT_SUCCESS);
 	case 2:
 		/* help */
 		write(STDOUT_FILENO, "Welcome to my version of help\n", 30);
@@ -42,4 +64,28 @@ int check_builtin(char **arguments)
 	default:
 		return (0);
 	}
+}
+
+
+/**
+ * execute_builtin_command - execute a built-in shell command
+ *
+ * @args: the arguments for the command
+ *
+ * Return: 0 on success, -1 on failure
+ */
+int execute_builtin_command(char **args)
+{
+	if (strcmp(args[0], "setenv") == 0)
+	{
+		set_shell_env(args[1], args[2]);
+		return (4);
+	}
+	else if (strcmp(args[0], "unsetenv") == 0)
+	{
+		unset_shell_env(args[1]);
+		return (5);
+	}
+
+	return (0);
 }
