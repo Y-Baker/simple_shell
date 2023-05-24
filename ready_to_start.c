@@ -1,52 +1,47 @@
 #include "stander_header.h"
 
 /**
- * check_path - check if the file is in the path
- * @envr: the environment vector
- * @filename: the first argument of command line
- * Return: the fullpath and check ture if success
+ * ready - to start shell
+ *
+ * Parameter:
+ * @argv: the argv
+ * @envr: the evironment
 */
 
-command_t *check_path(char *filename, char **envr)
+void ready(char *argv[], char **envr)
 {
-	char *path_env, *dir, *path_cy, *full_path;
-	int size;
-	command_t *new;
+	ssize_t ret;
+	char *buffer = NULL, **arguments, *prompt = "$ ";
+	size_t size = 0;
+	int builtin_return, path_return;
+	command_t *new_command;
 
-	new = malloc(sizeof(command_t));
-	if (!new)
+	while (TRUE)
 	{
-		return (NULL);
-	}
-	path_cy = get_envr_variable(envr, "PATH");
-	path_env = strdup(path_cy);
-	dir = strtok(path_env, ":");
-	while (dir)
-	{
-		size = strlen(dir) + (1 + strlen(filename));
-		full_path = malloc(sizeof(char) * size);
-		if (!full_path)
+		if (isatty(STDIN_FILENO))
+			write(STDOUT_FILENO, prompt, strlen(prompt));
+		ret = getline(&buffer, &size, stdin);
+		if (ret == -1)
+			own_free(buffer, NULL, NULL, F_EXIT);
+		arguments = _strtok(buffer, ret, envr);
+		path_return = check_ready_path(arguments, argv[0], envr);
+		builtin_return = checks(arguments);
+		if (builtin_return == 0 && path_return == 0)
 		{
-			perror("Can't allocate memory\n");
-			free(new);
-			free(path_env);
-			exit(EXIT_FAILURE);
+			new_command = check_path(arguments[0], envr);
+			if (!new_command || new_command->path == NULL)
+			{
+				free(new_command);
+				dprintf(STDERR_FILENO, "%s: No such file or directory\n", argv[0]);
+			}
+			else if (new_command->check == TRUE)
+			{
+				run_fork(new_command->path, arguments, argv[0], envr);
+				own_free(new_command->path, NULL, NULL, F_TRUE);
+				free(new_command);
+			}
 		}
-		strcpy(full_path, dir);
-		strcat(full_path, "/");
-		strcat(full_path, filename);
-		if (access(full_path, X_OK) == 0)
-		{
-			new->path = full_path;
-			new->check = TRUE;
-			free(path_env);
-			return (new);
-		}
-		own_free(full_path, NULL, NULL, F_TRUE);
-		dir = strtok(NULL, ":");
+		free(arguments);
+		buffer = NULL;
 	}
-	free(path_env);
-	new->path = NULL;
-	new->check = FALSE;
-	return (new);
 }
