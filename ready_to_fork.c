@@ -5,9 +5,10 @@
  * @arguments: the arguments
  * @argv: the first argument that is the name of the program
  * @envr: the environment vector
+ * @path: the path of the program
 */
 
-void run_fork(char **arguments, char *argv, char **envr)
+void run_fork(char *path, char **arguments, char *argv, char **envr)
 {
 	int stats;
 	pid_t child_pid;
@@ -21,7 +22,7 @@ void run_fork(char **arguments, char *argv, char **envr)
 	}
 	else if (child_pid == 0 && arguments)
 	{
-		if (execve(arguments[0], arguments, envr) == -1)
+		if (execve(path, arguments, envr) == -1)
 		{
 			dprintf(STDERR_FILENO, "%s: No such file or directory\n", argv);
 			return;
