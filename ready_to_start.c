@@ -22,7 +22,10 @@ void ready(char *argv[], char **envr)
 			write(STDOUT_FILENO, prompt, strlen(prompt));
 		ret = getline(&buffer, &size, stdin);
 		if (ret == -1)
-			own_free(buffer, NULL, NULL, F_EXIT);
+		{
+			free(buffer);
+			exit(0);
+		}
 		arguments = _strtok(buffer, ret);
 		path_return = check_ready_path(arguments, argv[0], envr);
 		builtin_return = checks(arguments, buffer);
