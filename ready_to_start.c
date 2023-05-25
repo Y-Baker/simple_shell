@@ -43,7 +43,7 @@ void ready(char *argv[], char **envr)
 		}
 		free(arguments);
 		own_free(buffer, NULL, NULL, F_TRUE);
-		if (!isatty(STDIN_FILENO))
+		if (!isatty(STDIN_FILENO) && feof(stdin))
 			exit(0);
 		buffer = NULL;
 	}
