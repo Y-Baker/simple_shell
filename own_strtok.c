@@ -15,6 +15,7 @@ char **_strtok(char *buffer, int size)
 	if (size <= 1)
 		return (NULL);
 
+	remove_spaces(buffer);
 	arguments = malloc(sizeof(char *) * MAX_ARGV);
 	if (!arguments)
 	{

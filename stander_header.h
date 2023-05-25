@@ -11,6 +11,7 @@
 #include <sys/types.h>
 #include <sys/wait.h>
 #include <sys/stat.h>
+#include <ctype.h>
 
 								/*STRUCTURE*/
 
@@ -46,5 +47,6 @@ int checks(char **arguments, char *buffer);
 int execute_builtin_command(char **args);
 int set_shell_env(const char *variable, const char *value);
 int unset_shell_env(const char *variable);
+void remove_spaces(char* str);
 
 #endif
