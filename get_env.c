@@ -4,7 +4,7 @@
  * get_envr_variable - get the path from envp
  * @envp: the environment vector
  * @var: varaibal name
- * Return: the path
+ * Return: the value of the variable
 */
 
 char *get_envr_variable(char *envp[], char *var)

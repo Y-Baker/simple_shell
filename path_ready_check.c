@@ -13,7 +13,6 @@ int check_ready_path(char **arguments, char *filename, char **envr)
 	if (!arguments)
 		return (-1);
 	if (arguments[0][0] == '/' || arguments[0][0] == '.')
-	{
 		if (access(arguments[0], X_OK) == 0)
 		{
 			run_fork(arguments[0], arguments, filename, envr);
@@ -24,7 +23,6 @@ int check_ready_path(char **arguments, char *filename, char **envr)
 			dprintf(STDERR_FILENO, "%s: No such file or directory\n", filename);
 			perror("Fork Doesn't Done (:");
 		}
-	}
 	else if (arguments[0][0] == '~')
 	{
 		write(STDOUT_FILENO, "THIS HAVE (~) SIGN\n", 19);

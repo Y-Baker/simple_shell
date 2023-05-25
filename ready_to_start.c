@@ -23,9 +23,9 @@ void ready(char *argv[], char **envr)
 		ret = getline(&buffer, &size, stdin);
 		if (ret == -1)
 			own_free(buffer, NULL, NULL, F_EXIT);
-		arguments = _strtok(buffer, ret, envr);
+		arguments = _strtok(buffer, ret);
 		path_return = check_ready_path(arguments, argv[0], envr);
-		builtin_return = checks(arguments);
+		builtin_return = checks(arguments, buffer);
 		if (builtin_return == 0 && path_return == 0)
 		{
 			new_command = check_path(arguments[0], envr);
@@ -42,6 +42,9 @@ void ready(char *argv[], char **envr)
 			}
 		}
 		free(arguments);
+		own_free(buffer, NULL, NULL, F_TRUE);
+		if (!isatty(STDIN_FILENO))
+			exit(0);
 		buffer = NULL;
 	}
 }

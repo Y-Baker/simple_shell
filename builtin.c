@@ -1,16 +1,18 @@
 #include "stander_header.h"
 
+
 /**
  * checks - checks for builtin functions
  * @arguments: the arguments
+ * @buffer: the buffer
  * Return: 0 if not builtin
 */
 
-int checks(char **arguments)
+int checks(char **arguments, char *buffer)
 {
 	int re_1, re_2;
 
-	re_1 = check_builtin(arguments);
+	re_1 = check_builtin(arguments, buffer);
 	if (re_1 == 0)
 	{
 		re_2 = execute_builtin_command(arguments);
@@ -23,14 +25,16 @@ int checks(char **arguments)
 	return (re_1);
 }
 
+
 /**
  * check_builtin - check for built in function
  * @arguments: the arguments of command line
+ * @buffer: the buffer
  * Return: 0 if it not an builtin function
  *
 */
 
-int check_builtin(char **arguments)
+int check_builtin(char **arguments, char *buffer)
 {
 	char *builtin[] = {"exit", "help", "cd"};
 	int n = 0, i;
@@ -52,6 +56,7 @@ int check_builtin(char **arguments)
 	{
 	case 1:
 		free(arguments);
+		free(buffer);
 		exit(EXIT_SUCCESS);
 	case 2:
 		/* help */

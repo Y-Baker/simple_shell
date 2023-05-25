@@ -15,9 +15,7 @@ command_t *check_path(char *filename, char **envr)
 
 	new = malloc(sizeof(command_t));
 	if (!new)
-	{
-		return (NULL);
-	}
+		exit(EXIT_FAILURE);
 	path_cy = get_envr_variable(envr, "PATH");
 	path_env = strdup(path_cy);
 	dir = strtok(path_env, ":");
@@ -42,7 +40,7 @@ command_t *check_path(char *filename, char **envr)
 			free(path_env);
 			return (new);
 		}
-		own_free(full_path, NULL, NULL, F_TRUE);
+		free(full_path);
 		dir = strtok(NULL, ":");
 	}
 	free(path_env);
