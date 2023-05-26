@@ -28,7 +28,7 @@ void ready(char *argv[], char **envr)
 		}
 		arguments = _strtok(buffer, ret);
 		path_return = check_ready_path(arguments, argv[0], envr);
-		builtin_return = checks(arguments, buffer);
+		builtin_return = checks(arguments, buffer, envr);
 		if (builtin_return == 0 && path_return == 0)
 		{
 			new_command = check_path(arguments[0], envr);

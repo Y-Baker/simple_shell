@@ -12,10 +12,10 @@ char **_strtok(char *buffer, int size)
 	char *s = NULL, **arguments;
 	int count = 1;
 
-	if (size <= 1)
+	remove_spaces(buffer);
+	if (size <= 1 || strlen(buffer) <= 0)
 		return (NULL);
 
-	remove_spaces(buffer);
 	arguments = malloc(sizeof(char *) * MAX_ARGV);
 	if (!arguments)
 	{
